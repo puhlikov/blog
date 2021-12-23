@@ -1,0 +1,47 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<project default="build-project" name="Main"
+         xmlns:ivy="antlib:org.apache.ivy.ant">
+
+    <property name="src" location="src"/>
+    <property name="classesdir" value="build/classes"/>
+    <property name="jardir" value="archive/build-project.jar"/>
+    <property name="mainclass" value="com.epam.training.Main"/>
+    <property name="lib" location="lib"/>
+
+    <target name="build-project">
+        <buildproject mainclass="${mainclass}" jardir="${jardir}" classesdir="${classesdir}">
+            <projectsrcdir>
+                <path location="${src}"/>
+            </projectsrcdir>
+            <projectclasspath>
+                <fileset dir="${lib}"/>
+            </projectclasspath>
+        </buildproject>
+    </target>
+
+    <macrodef name="buildproject">
+        <attribute name="classesdir"/>
+        <attribute name="jardir"/>
+        <attribute name="mainclass"/>
+        <element name="projectsrcdir"/>
+        <element name="projectclasspath"/>
+        <sequential>
+            <mkdir  dir = "@{classesdir}"/>
+            <javac includeantruntime="true" destdir="@{classesdir}">
+                <src>
+                    <projectsrcdir/>
+                </src>
+                <classpath>
+                    <projectclasspath/>
+                </classpath>
+            </javac>
+            <jar basedir="@{classesdir}" destfile="@{jardir}">
+                    <manifest>
+                        <attribute name="Main-Class" value = "@{mainclass}"/>
+                    </manifest>
+            </jar>
+            <java fork = "true" jar="@{jardir}"/>
+        </sequential>
+    </macrodef>
+</project>

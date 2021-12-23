@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project default="main" name = "Validator" xmlns:ivy="antlib:org.apache.ivy.ant">
+    <property name="scr.dir" location="src"/>
+    <target name ="build">
+        <mkdir dir="build/classes"/>
+        <javac includeantruntime="true" destdir="build/classes" srcdir="${scr.dir}"/>
+    </target>
+    <target name="validator-buildfile">
+        <taskdef name="validator"
+                 classname="com.epam.training.BuildValidator"
+                 classpath="build/classes"/>
+        <validator checknames="true" checkdefault="true" checkdepends="true">
+            <filebuild position = "validator.xml"/>
+            <filebuild position = "build.xml"/>
+        </validator>
+    </target>
+    <target name="main" depends="build,validator-buildfile">
+        <target name="resolve">
+            <ivy:retrieve/>
+        </target>
+    </target>
+</project>
